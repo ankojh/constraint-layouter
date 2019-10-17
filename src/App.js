@@ -1,11 +1,16 @@
 import React from 'react';
 import './App.css';
-import Canvas from './components/canvas/Canvas'
+import Editor from './components/editor/Editor.component'
+import Toolbar from './components/toolbar/Toolbar.component';
+import CanvasContainer from './components/canvas/Canvas-Container.component';
 
 function App() {
   return (
     <div className="App">
-      <Canvas />
+      <Toolbar />
+      <CanvasContainer />
+      {/* <Canvas /> */}
+      {/* <Editor /> */}
     </div>
   );
 }
