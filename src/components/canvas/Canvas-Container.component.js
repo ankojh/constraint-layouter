@@ -5,7 +5,9 @@ import './Canvas-Container.css'
 function CanvasContainer(){
   return (
     <div className="cl-canvas-container">
-      <Canvas />
+        <div className="cl-canvas__transform">
+          <Canvas />
+        </div>
     </div>
   )
 }

@@ -1,3 +1,7 @@
 .cl-canvas-container{
   flex-grow: 1;
 }
+
+.cl-canvas__transform{
+  position: absolute;
+}
