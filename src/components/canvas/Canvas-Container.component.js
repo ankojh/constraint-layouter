@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Canvas from './Canvas.component';
 import './Canvas-Container.css'
 

@@ -9,3 +9,17 @@
   user-select: none;
   cursor: grab;
 }
+
+.cl-rect{
+  border: 1px solid #009eff;
+  background: rgba(0,0,0,0.1);
+}
+
+.cl-rect:hover{
+  border: 1px solid rgb(247, 0, 255);
+}
+
+.cl-rect.cl__selected{
+  border: 1px solid rgb(255, 0, 234);
+  background: rgba(225, 0, 255, 0.2);
+}

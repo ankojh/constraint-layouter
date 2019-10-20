@@ -20,6 +20,13 @@ export default {
       y: 200,
       width: 200,
       height: 400
+    },
+    {
+      id: 'el4',
+      x: 450,
+      y: 150,
+      width: 200,
+      height: 300
     }
   ]
 }

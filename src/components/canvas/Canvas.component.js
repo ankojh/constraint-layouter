@@ -1,48 +1,87 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Canvas.css'
+import { fromEvent } from 'rxjs';
+import { throttleTime } from 'rxjs/operators';
 import rectData from '../../data/basic-case'
-
-const rects = rectData.rects;
 
 function Canvas(){
 
-  const rectDivs = rects.map((data, index)=>{
-    const areaStyle = {
-      gridArea: data.id,
-      border: '1px solid black'
-    }
-
-    return (<div className="cl-rect" style={areaStyle} key={data.id}></div>);
-    // return (null);
+  const [state, setState] = useState({
+    rectData: rectData.rects
   })
 
+  const [selectedRectId, setSelectedRectId] = useState('')
 
-   const rowDetails = rects.map(data => {
-     return {
-       id: data.id,
-       start: data.y,
-       end: data.y + data.height
-     };
-   })
+  let mouseMoveSubscrition = null;
+  let mouseUpSubscrition = null;
 
-   const columnDetails = rects.map(data => {
-     return {
-       id: data.id,
-       start: data.x,
-       end: data.x + data.width
-     };
-   })
+  function getRowDetails(){
+    return state.rectData.map(data => {
+      return {
+        id: data.id,
+        start: data.y,
+        end: data.y + data.height
+      };
+    })
+  }
+
+  function getColumnDetails(){
+    return state.rectData.map(data => {
+      return {
+        id: data.id,
+        start: data.x,
+        end: data.x + data.width
+      };
+    })
+  }
+
+  function getRectEls(){
+    return state.rectData.map(data=>{
+      const areaStyle = { gridArea: data.id }
+      return (<div 
+        className={`cl-rect ${data.id === selectedRectId ? 'cl__selected': ''}`} 
+        style={areaStyle} 
+        key={data.id}
+        onMouseDown={(event)=>{rectMouseDown(event,data.id)}}>
+        </div>);
+    })
+  }
+
+  function rectMouseDown(event, rectId){
+    event.stopPropagation(); // for unselection not to happeen
+    setSelectedRectId(rectId);
+    
+    if (mouseMoveSubscrition)
+      mouseMoveSubscrition.unsubscribe();
+  
+    if (mouseUpSubscrition)
+    mouseUpSubscrition.unsubscribe();
+  
+    mouseMoveSubscrition = fromEvent(document.body, 'mousemove').pipe(throttleTime(16)).subscribe(e => {
+      rectMouseMove(e)
+    });
+    mouseUpSubscrition = fromEvent(document.body, 'mouseup').pipe(throttleTime(16)).subscribe(e => {
+      rectMouseUp(e)
+    });
+  }
+
+  function rectMouseMove(event){
+    console.log('mousemove')
+  }
+
+  function rectMouseUp(){
+    console.log('mouseup')
+    mouseMoveSubscrition.unsubscribe();
+    mouseUpSubscrition.unsubscribe();
+  }
+
 
   function getGridStyle(){
     return {
-      grid: `${generatePartGridStyle(rowDetails)} / ${generatePartGridStyle(columnDetails)}`
+      grid: `${generatePartGridStyle(getRowDetails())} / ${generatePartGridStyle(getColumnDetails())}`
     }
   }
 
-
-  function partGridStyleListCompare(detail1, detail2) {
-    return detail1.value - detail2.value;
-  }
 
   function generatePartGridStyle(details){
     const partStyleDetailsList = []
@@ -51,6 +90,7 @@ function Canvas(){
 
     details.forEach(detail => {
       partStyleDetailsList.push({id:detail.id, value: detail.start, start: true, end: false})
+      partStyleDetailsList.push({id:detail.id, value: (detail.start+detail.end)/2, start: false, end: false})
       partStyleDetailsList.push({id:detail.id, value: detail.end, start: false, end: true})
     })
 
@@ -74,15 +114,15 @@ function Canvas(){
 
     Object.keys(valueLineObject).sort().forEach((value, index)=>{
 
-      partStyleString += value - prevValue + 'px' + ' '
+      partStyleString += `${value - prevValue}px `
 
       partStyleString += '[ '
       valueLineObject[value].start.forEach(startId =>{
-        partStyleString += startId += '-start' +' ';
+        partStyleString += `${startId}-start `;
       })
 
       valueLineObject[value].end.forEach(endId => {
-        partStyleString += endId += '-end' + ' ';
+        partStyleString += `${endId}-end `;
       })
       partStyleString += '] '
 
@@ -91,15 +131,20 @@ function Canvas(){
 
     })
 
-    console.log(partStyleString);
+    // console.log(partStyleString);
 
     return partStyleString;
-    // return "100%";
   }
 
 
   return (
-    <div className="cl-canvas" style={getGridStyle()}>{rectDivs}</div>
+    <div 
+      className="cl-canvas" 
+      style={getGridStyle()}
+      onMouseDown={()=>{if(selectedRectId !== ''){setSelectedRectId('')}}}
+      >
+        {getRectEls()}
+      </div>
   )
 }
 
