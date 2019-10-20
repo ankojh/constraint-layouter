@@ -7,8 +7,13 @@ const rects = rectData.rects;
 function Canvas(){
 
   const rectDivs = rects.map((data, index)=>{
-    // return (<div className="cl-rect" key={data.id}></div>);
-    return (null);
+    const areaStyle = {
+      gridArea: data.id,
+      border: '1px solid black'
+    }
+
+    return (<div className="cl-rect" style={areaStyle} key={data.id}></div>);
+    // return (null);
   })
 
 
@@ -41,45 +46,55 @@ function Canvas(){
 
   function generatePartGridStyle(details){
     const partStyleDetailsList = []
-    const partStyleString = '';
+    let partStyleString = '';
     const valueLineObject = {};
 
     details.forEach(detail => {
       partStyleDetailsList.push({id:detail.id, value: detail.start, start: true, end: false})
-      partStyleDetailsList.push({id:detail.id, value: detail.end - detail.start, start: false, end: true})
+      partStyleDetailsList.push({id:detail.id, value: detail.end, start: false, end: true})
     })
 
-    console.log(details);
-
-    // const sortedpartStyleDetailsList = partStyleDetailsList.sort(partGridStyleListCompare);
-
-    partStyleDetailsList.forEach(detail => {
+    partStyleDetailsList.forEach(detail=>{
       if(!valueLineObject[detail.value]){
-        valueLineObject[detail.value] = {start:[], end:[]};
+        valueLineObject[detail.value] = {start:[], end:[]}
       }
 
       if(detail.start){
         valueLineObject[detail.value].start.push(detail.id);
       }
-
-      if(detail.end){
+      else if(detail.end){
         valueLineObject[detail.value].end.push(detail.id);
       }
+    });
+
+    
+
+    partStyleString = ''
+    let prevValue = 0;
+
+    Object.keys(valueLineObject).sort().forEach((value, index)=>{
+
+      partStyleString += value - prevValue + 'px' + ' '
+
+      partStyleString += '[ '
+      valueLineObject[value].start.forEach(startId =>{
+        partStyleString += startId += '-start' +' ';
+      })
+
+      valueLineObject[value].end.forEach(endId => {
+        partStyleString += endId += '-end' + ' ';
+      })
+      partStyleString += '] '
+
+
+      prevValue = value;
+
     })
 
+    console.log(partStyleString);
 
-    // console.log(valueLineObject);
-    // console.log(partStyleDetailsList);
-
-
-    // Object.keys(valueLineObject).sort().forEach((value, index)=>{
-      // console.log(valueLineObject[value]);
-      // partStyleString += []
-    // })
-
-    // console.log(partStyleDetailsList, partStyleString, valueLineObject);
-
-    return '100%'
+    return partStyleString;
+    // return "100%";
   }
 
 
