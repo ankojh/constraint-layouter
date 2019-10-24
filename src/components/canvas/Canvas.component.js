@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import './Canvas.css'
 import { fromEvent } from 'rxjs';
 import rectData from '../../data/basic-case'
@@ -6,44 +6,86 @@ import { getGridStyle } from './../../lib/gridUtils'
 
 let gRD = rectData;
 
-function Canvas(props){
+class Canvas extends Component {
 
-  const [rects, setRects] = useState(gRD.rects);
-  const [selectionId, setSelectionId] = useState(null);
-  
-  useEffect(()=>{
-    console.log(JSON.stringify(rects));
-  })
+  state = {  }
 
-  function rectMouseDown(event, id){
+  constructor(){
+    super();
+
+    this.state = {
+      rects: gRD.rects,
+      selectionId: ''
+    }
+  }
+
+  rectMouseDown(event, id){
     event.stopPropagation();
-    props.onMouseDown(event, id, rects, setRects);
+    this.props.onMouseDown(event, id, this.state.rects, this.setState);
   }
 
-  function canvasMouseDown(){
-    setSelectionId('');
+  canvasMouseDown(){
+    this.setState({...this.state, selectionId: ''});
   }
 
-  function getRectEls(){
-    return rects.map(({id}) => {
+  getRectEls(){
+    return this.state.rects.map(({id}) => {
       const areaStyle = { gridArea: id }
       return (<div 
-        onMouseDown={event=>{rectMouseDown(event, id)}}
-        className={`cl-rect ${selectionId === id ? 'cl__selected' : '' }`} 
+        onMouseDown={event=>{this.rectMouseDown(event, id)}}
+        className={`cl-rect ${this.state.selectionId === id ? 'cl__selected' : '' }`} 
         style={areaStyle} 
         key={id}>
         </div>);
     })
   } 
 
-  return (
-    <div 
-      className="cl-canvas" 
-      onMouseDown={event=>{canvasMouseDown(event)}}
-      style={getGridStyle(rects)}>
-        {getRectEls()}
-      </div>
-  )
+  render() { 
+    return ( < div
+              className="cl-canvas" 
+              onMouseDown={event=>{this.canvasMouseDown(event)}}
+              style={getGridStyle(this.state.rects)}>
+                {this.getRectEls()}
+              </div> );
+  }
 }
-
+ 
 export default Canvas;
+
+// function Canvas(props){
+
+//   const [rects, setRects] = useState(gRD.rects);
+//   const [selectionId, setSelectionId] = useState(null);
+  
+//   function rectMouseDown(event, id){
+//     event.stopPropagation();
+//     props.onMouseDown(event, id, rects, setRects);
+//   }
+
+//   function canvasMouseDown(){
+//     setSelectionId('');
+//   }
+
+//   function getRectEls(){
+//     return rects.map(({id}) => {
+//       const areaStyle = { gridArea: id }
+//       return (<div 
+//         onMouseDown={event=>{rectMouseDown(event, id)}}
+//         className={`cl-rect ${selectionId === id ? 'cl__selected' : '' }`} 
+//         style={areaStyle} 
+//         key={id}>
+//         </div>);
+//     })
+//   } 
+
+//   return (
+//     <div 
+//       className="cl-canvas" 
+//       onMouseDown={event=>{canvasMouseDown(event)}}
+//       style={getGridStyle(rects)}>
+//         {getRectEls()}
+//       </div>
+//   )
+// }
+
+// export default Canvas;
