@@ -42,18 +42,15 @@ export function generatePartGridStyle(details, rOrC){
         valueLineObject[detail.value].end.push(detail.id);
       }
     });
-    
 
+    
     partStyleString = ''
     let prevValue = 0;
 
-    console.group();
 
-    Object.keys(valueLineObject).sort().forEach(value=>{
+    Object.keys(valueLineObject).sort((a,b)=>parseFloat(a) - parseFloat(b)).forEach(value=>{
 
-      if(rOrC == 'col')
-        console.log(value, prevValue);
-        
+  
       partStyleString += `${value - prevValue}px `
 
       partStyleString += '[ '
@@ -70,8 +67,6 @@ export function generatePartGridStyle(details, rOrC){
       prevValue = value;
 
     })
-
-    console.groupEnd();
     
     return partStyleString;
   }

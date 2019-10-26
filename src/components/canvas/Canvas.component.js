@@ -38,7 +38,6 @@ class Canvas extends Component {
         id = {data.id}
         rectMouseDown = { this.rectMouseDown.bind(this) }
         key={data.id}
-        position={{x:data.x, y:data.y}}
         /> );
     })
   }
