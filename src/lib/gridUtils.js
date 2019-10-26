@@ -18,7 +18,7 @@ export function getRowDetails(rectRowData){
     })
   }
 
-export function generatePartGridStyle(details){
+export function generatePartGridStyle(details, rOrC){
     const partStyleDetailsList = []
     let partStyleString = '';
     const valueLineObject = {};
@@ -28,6 +28,7 @@ export function generatePartGridStyle(details){
       partStyleDetailsList.push({id:detail.id, value: (detail.start+detail.end)/2, start: false, end: false})
       partStyleDetailsList.push({id:detail.id, value: detail.end, start: false, end: true})
     })
+
 
     partStyleDetailsList.forEach(detail=>{
       if(!valueLineObject[detail.value]){
@@ -41,14 +42,18 @@ export function generatePartGridStyle(details){
         valueLineObject[detail.value].end.push(detail.id);
       }
     });
-
     
 
     partStyleString = ''
     let prevValue = 0;
 
+    console.group();
+
     Object.keys(valueLineObject).sort().forEach(value=>{
 
+      if(rOrC == 'col')
+        console.log(value, prevValue);
+        
       partStyleString += `${value - prevValue}px `
 
       partStyleString += '[ '
@@ -65,12 +70,15 @@ export function generatePartGridStyle(details){
       prevValue = value;
 
     })
+
+    console.groupEnd();
     
     return partStyleString;
   }
 
+
   export function getGridStyle(rects) {
     return {
-      grid: `${generatePartGridStyle(getRowDetails(rects))} / ${generatePartGridStyle(getColumnDetails(rects))}`
+      grid: `${generatePartGridStyle(getRowDetails(rects),'row')} / ${generatePartGridStyle(getColumnDetails(rects),'col')}`
     }
   }

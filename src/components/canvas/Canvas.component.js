@@ -30,14 +30,15 @@ class Canvas extends Component {
 
 
   getRectEls(){
-    return this.props.rectData.map(({id}) => {
-      const areaStyle = { gridArea: id }
+    return this.props.rectData.map((data) => {
+      const areaStyle = { gridArea: data.id }
       return (<Rect 
-        isSelected ={id == this.state.selectionId}
+        isSelected ={data.id == this.state.selectionId}
         areaStyle = {areaStyle}
-        id = {id}
+        id = {data.id}
         rectMouseDown = { this.rectMouseDown.bind(this) }
-        key={id}
+        key={data.id}
+        position={{x:data.x, y:data.y}}
         /> );
     })
   }
@@ -137,9 +138,13 @@ class Canvas extends Component {
 
 
   render() { 
+    const gridStyle = getGridStyle(this.props.rectData);
+
+    // console.log(gridStyle);
+
     return ( < div
               className="cl-canvas" 
-              style={getGridStyle(this.props.rectData)}>
+              style={gridStyle}>
                 {this.getRectEls()}
               </div> );
   }

@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import Canvas from './Canvas.component';
 import './Canvas-Container.css'
 import rectData from '../../data/basic-case'
-import { fromEvent } from 'rxjs';
-import { throttleTime } from 'rxjs/operators';
 
 class CanvasContainer extends Component {
   state = { }
