@@ -5,10 +5,9 @@ import { throttleTime } from 'rxjs/operators';
 
 import { getGridStyle } from './../../lib/gridUtils'
 import Rect from '../rect/Rect.component'
+import rectData from '../../data/basic-case'
 
 class Canvas extends Component {
-
-  state = {  }
 
   selectionId = null;
   mouseMoveSubscription = null;
@@ -26,11 +25,33 @@ class Canvas extends Component {
 
   constructor(){
     super();
+    this.state = {
+      rects: [...rectData.rects],
+      selectionId: null
+    };
   }
 
 
+  updateState(stateProperty, value){
+    const newState = {...this.state};
+    newState[stateProperty] = value;
+    this.setState(newState);
+  }
+
+  updateRectData(rectIndex, rectDetail){
+    const newRectState = [...this.state.rects];
+
+    if(rectDetail.x<0 || rectDetail.y <0){
+      console.warn("negatives"); //handle it later
+      return;
+    }
+
+    newRectState[rectIndex] = rectDetail;
+    this.updateState('rects', newRectState);
+  }
+
   getRectEls(){
-    return this.props.rectData.map((data) => {
+    return this.state.rects.map((data) => {
       const areaStyle = { gridArea: data.id }
       return (<Rect 
         isSelected ={data.id == this.state.selectionId}
@@ -44,13 +65,10 @@ class Canvas extends Component {
 
 
   rectMouseDown(event, id) {
-    console.log('down', id);
     event.stopPropagation();
-    this.selectionId = id;
-    this.rectsData = [...this.props.rectData];
-    // this.setRectsData = setRects;
+    this.rectsData = [...this.state.rects];
 
-    this.movingRectIndex = this.props.rectData.findIndex(rect => rect.id === this.selectionId);
+    this.movingRectIndex = this.state.rects.findIndex(rect => rect.id === id);
 
     if(this.mouseMoveSubscription){
       this.mouseMoveSubscription.unsubscribe();
@@ -77,30 +95,21 @@ class Canvas extends Component {
       x: event.clientX,
       y: event.clientY
     };
+
+    this.updateState('selectionId', id);
   }
 
   rectMouseMove(event) {
-    // console.log("rectMM");
     const currentPosition = {x:event.clientX, y: event.clientY};
 
     const diff = {x: currentPosition.x - this.previousMousePosition.x, y: currentPosition.y - this.previousMousePosition.y};
 
-    // this.diffPosition.x += diff.x;
-    // this.diffPosition.y += diff.y;
-
-    this.rectsData = [...this.props.rectData];
-
-    // console.log(this.rectsData[this.movingRectIndex].x, this.rectsData[this.movingRectIndex].y)
-
-
-    // this.rectsData[this.movingRectIndex].x += this.diffPosition.x;
-    // this.rectsData[this.movingRectIndex].y += this.diffPosition.y;
+    this.rectsData = [...this.state.rects];
 
     this.rectsData[this.movingRectIndex].x += diff.x;
     this.rectsData[this.movingRectIndex].y += diff.y;
 
-
-    this.props.updateRectData(this.movingRectIndex,this.rectsData[this.movingRectIndex]);
+    this.updateRectData(this.movingRectIndex,this.rectsData[this.movingRectIndex]);
 
 
     this.previousMousePosition = {
@@ -110,8 +119,6 @@ class Canvas extends Component {
   }
 
   rectMouseUp(event) {
-    // console.log('rectMU');
-    console.log('up', this.selectionId);
     this.mouseMoveSubscription.unsubscribe();
     this.mouseUpSubscription.unsubscribe();
     this.mouseDownPosition = {
@@ -123,26 +130,26 @@ class Canvas extends Component {
       y: null
     };
 
-    this.rectsData = [...this.props.rectData];
+    this.rectsData = [...this.state.rects];
 
     this.rectsData[this.movingRectIndex].x += this.diffPosition.x;
     this.rectsData[this.movingRectIndex].y += this.diffPosition.y;
-
-    // this.props.updateRectData(this.movingRectIndex, this.rectsData[this.movingRectIndex]);
 
     this.rectsData = null;
     this.setRectsData = null;
     this.movingRectIndex = null;
   }
 
+  canvasMouseDowned(event){
+    this.updateState('selectionId', null);
+  }
+
 
   render() { 
-    const gridStyle = getGridStyle(this.props.rectData);
-
-    // console.log(gridStyle);
-
+    const gridStyle = getGridStyle(this.state.rects);
     return ( < div
               className="cl-canvas" 
+              onMouseDown={e=>{this.canvasMouseDowned(e)}}
               style={gridStyle}>
                 {this.getRectEls()}
               </div> );
