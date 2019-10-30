@@ -25,7 +25,7 @@ export function generatePartGridStyle(details, rOrC){
 
     details.forEach(detail => {
       partStyleDetailsList.push({id:detail.id, value: detail.start, start: true, end: false})
-      partStyleDetailsList.push({id:detail.id, value: (detail.start+detail.end)/2, start: false, end: false})
+      // partStyleDetailsList.push({id:detail.id, value: (detail.start+detail.end)/2, start: false, end: false})
       partStyleDetailsList.push({id:detail.id, value: detail.end, start: false, end: true})
     })
 

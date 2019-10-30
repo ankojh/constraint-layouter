@@ -1,0 +1,21 @@
+.cl-guides-container{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+}
+
+.cl-row-guide{
+  position: absolute;
+  background: blue;
+  width: 100%;
+  height: 2px;
+}
+
+.cl-column-guide{
+  position: absolute;
+  background: blue;
+  width: 2px;
+  height: 100%;
+}
+

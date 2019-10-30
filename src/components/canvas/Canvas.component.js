@@ -5,11 +5,9 @@ import { throttleTime } from 'rxjs/operators';
 
 import { getGridStyle } from './../../lib/gridUtils'
 import Rect from '../rect/Rect.component'
-import rectData from '../../data/basic-case'
 
 class Canvas extends Component {
 
-  selectionId = null;
   mouseMoveSubscription = null;
   mouseUpSubscription = null;
   mouseDownPosition = {x: null, y: null};
@@ -25,36 +23,14 @@ class Canvas extends Component {
 
   constructor(){
     super();
-    this.state = {
-      rects: [...rectData.rects],
-      selectionId: null
-    };
-  }
-
-
-  updateState(stateProperty, value){
-    const newState = {...this.state};
-    newState[stateProperty] = value;
-    this.setState(newState);
-  }
-
-  updateRectData(rectIndex, rectDetail){
-    const newRectState = [...this.state.rects];
-
-    if(rectDetail.x<0 || rectDetail.y <0){
-      console.warn("negatives"); //handle it later
-      return;
-    }
-
-    newRectState[rectIndex] = rectDetail;
-    this.updateState('rects', newRectState);
   }
 
   getRectEls(){
-    return this.state.rects.map((data) => {
+    return this.props.rectData.map((data) => {
       const areaStyle = { gridArea: data.id }
       return (<Rect 
-        isSelected ={data.id == this.state.selectionId}
+        isSelected ={data.id == this.props.selectionId}
+        isWrtRect = {data.id == this.props.wrtRectId}
         areaStyle = {areaStyle}
         id = {data.id}
         rectMouseDown = { this.rectMouseDown.bind(this) }
@@ -66,9 +42,9 @@ class Canvas extends Component {
 
   rectMouseDown(event, id) {
     event.stopPropagation();
-    this.rectsData = [...this.state.rects];
+    this.rectsData = [...this.props.rectData];
 
-    this.movingRectIndex = this.state.rects.findIndex(rect => rect.id === id);
+    this.movingRectIndex = this.props.rectData.findIndex(rect => rect.id === id);
 
     if(this.mouseMoveSubscription){
       this.mouseMoveSubscription.unsubscribe();
@@ -96,7 +72,7 @@ class Canvas extends Component {
       y: event.clientY
     };
 
-    this.updateState('selectionId', id);
+    this.props.setSelectionId(id);
   }
 
   rectMouseMove(event) {
@@ -104,12 +80,12 @@ class Canvas extends Component {
 
     const diff = {x: currentPosition.x - this.previousMousePosition.x, y: currentPosition.y - this.previousMousePosition.y};
 
-    this.rectsData = [...this.state.rects];
+    this.rectsData = [...this.props.rectData];
 
     this.rectsData[this.movingRectIndex].x += diff.x;
     this.rectsData[this.movingRectIndex].y += diff.y;
 
-    this.updateRectData(this.movingRectIndex,this.rectsData[this.movingRectIndex]);
+    this.props.updateRectData(this.movingRectIndex,this.rectsData[this.movingRectIndex]);
 
 
     this.previousMousePosition = {
@@ -130,25 +106,30 @@ class Canvas extends Component {
       y: null
     };
 
-    this.rectsData = [...this.state.rects];
+    this.rectsData = [...this.props.rectData];
 
     this.rectsData[this.movingRectIndex].x += this.diffPosition.x;
     this.rectsData[this.movingRectIndex].y += this.diffPosition.y;
 
+
+
     this.rectsData = null;
     this.setRectsData = null;
     this.movingRectIndex = null;
+    this.props.setSelectionId(null);
+    // update the state on mouse up.
   }
 
   canvasMouseDowned(event){
-    this.updateState('selectionId', null);
+    this.props.setSelectionId(null);
   }
 
 
   render() { 
-    const gridStyle = getGridStyle(this.state.rects);
-    return ( < div
-              className="cl-canvas" 
+    const gridStyle = getGridStyle(this.props.rectData);
+    return ( 
+            <div
+              className="cl-canvas"   //canvas is grid
               onMouseDown={e=>{this.canvasMouseDowned(e)}}
               style={gridStyle}>
                 {this.getRectEls()}
