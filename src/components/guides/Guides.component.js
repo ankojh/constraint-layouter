@@ -24,29 +24,32 @@ class Guides extends Component {
   }
 
   setGuideData(newProps){
+
+    const selectedRectData = newProps.rectData.find(rectData=>rectData.id == newProps.selectionId);
+
     this.guideData = {
-      rowGuides: getRowGuides(newProps.rectData, newProps.selectionId),
-      columnGuides: getColumnGuides(newProps.rectData, newProps.selectionId)
+      rowGuides: getRowGuides(newProps.rectData, selectedRectData),
+      columnGuides: getColumnGuides(newProps.rectData, selectedRectData)
     }
   }
 
   getRowGuidesLines(){
-    return this.guideData.rowGuides.map((position,index) => {
+    return this.guideData.rowGuides.map((guideData,index) => {
         return (
           <div
            key={index}
-           style={{top: `${position}px`}}
+           style={{top: `${guideData.position}px`}}
            className="cl-row-guide">
           </div>)
       })
   }
 
   getColumnGuideLines(){
-    return this.guideData.columnGuides.map((position, index) => {
+    return this.guideData.columnGuides.map((guideData, index) => {
         return (
           <div
            key={index}
-           style={{left: `${position}px`}}
+           style={{left: `${guideData.position}px`}}
            className="cl-column-guide">
           </div>)
       })

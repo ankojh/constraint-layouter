@@ -11,7 +11,7 @@ class CanvasContainer extends Component {
     this.state = {
       rects: [...rectData.rects],
       selectionId: null,
-      wrtRectId: null
+      wrtRectIds: ['el1']
     };
   }
 
@@ -37,8 +37,8 @@ class CanvasContainer extends Component {
     this.updateState('selectionId', newId);
   }
 
-  setWrtRectId(newId){
-    this.updateState('wrtRectId', newId);
+  setWrtRectIds(newIds){
+    this.updateState('wrtRectId', newIds);
   }
   
   render() { 
@@ -52,13 +52,13 @@ class CanvasContainer extends Component {
                     <Guides 
                       rectData={[...this.state.rects]}
                       selectionId={this.state.selectionId}
-                      setWrtRectId={this.setWrtRectId.bind(this)}
+                      setWrtRectIds={this.setWrtRectIds.bind(this)}
                        />
 
                     <Canvas 
                       rectData={[...this.state.rects]}
                       selectionId={this.state.selectionId}
-                      wrtRectId={this.state.wrtRectId}
+                      wrtRectIds={this.state.wrtRectIds}
                       updateRectData={this.updateRectData.bind(this)}
                       setSelectionId={this.setSelectionId.bind(this)} />
                 </div>
