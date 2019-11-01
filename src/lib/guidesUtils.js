@@ -1,42 +1,42 @@
 import {getRowDetails, getColumnDetails} from './gridUtils'
-import { getRectsCloserToMatchedRects } from './rectUtils';
+import { getClosestMatchedRect } from './rectUtils';
 
-export function getRowGuides(rectData, selectionRect, wrtRectId="el4") {
+export function getRowGuides(rectData, selectionRect, wrtRectIds) {
 
   if (!selectionRect) {
-    return [];
+    return {guides: [], wrtRectIds};
   }
 
   const rowData = getRowDetails(rectData);
   const rowGuides = getPartGuides(rowData, selectionRect.id);
   
-  return getBestGuides(rectData, selectionRect, wrtRectId, rowGuides);
+  return getBestGuides(rectData, selectionRect, wrtRectIds, rowGuides, 'row');
 }
 
 
-export function getColumnGuides(rectData, selectionRect, wrtRectId="el4") {
+export function getColumnGuides(rectData, selectionRect, wrtRectIds) {
 
   if (!selectionRect) {
-    return [];
+    return {guides: [], wrtRectIds};
   }
 
   const columnData = getColumnDetails(rectData);
   const columnGuides = getPartGuides(columnData, selectionRect.id);
 
-  return getBestGuides(rectData, selectionRect, wrtRectId, columnGuides);
+  return getBestGuides(rectData, selectionRect, wrtRectIds, columnGuides, 'column');
 }
 
 
-function getBestGuides(rectData, selectionRect, wrtRectId, partGuides){
-  if (!wrtRectId) {
+function getBestGuides(rectData, selectionRect, wrtRectIds, partGuides, rowOrColumn){
+  if (!wrtRectIds.length) {
     const matchedGuidesRect = partGuides.map(guideData => rectData.find(rd => rd.id == guideData.id));
-    const closestRect = getRectsCloserToMatchedRects(selectionRect, matchedGuidesRect);
-    wrtRectId = closestRect.id;
+    const closestRect = getClosestMatchedRect(selectionRect, matchedGuidesRect, rowOrColumn);
+    wrtRectIds = closestRect ? [closestRect.id] : [];
   }
 
-  const guidesWrtRect = partGuides.filter(partGuideData => partGuideData.id == wrtRectId);
+  const guidesWrtRect = partGuides.filter(partGuideData => wrtRectIds.includes(partGuideData.id));
 
-  return guidesWrtRect.length ? [guidesWrtRect[0]] : []
+  return guidesWrtRect.length ? {guides:[guidesWrtRect[0]], wrtRectIds} : {guides:[], wrtRectIds}
 }
 
 

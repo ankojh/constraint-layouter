@@ -26,11 +26,13 @@ class Canvas extends Component {
   }
 
   getRectEls(){
+
+    // console.log(this.props);
     return this.props.rectData.map((data) => {
       const areaStyle = { gridArea: data.id }
       return (<Rect 
         isSelected ={data.id == this.props.selectionId}
-        isWrtRect = {data.id == this.props.wrtRectId}
+        isWrtRect = {this.props.wrtRectIds.includes(data.id)}
         areaStyle = {areaStyle}
         id = {data.id}
         rectMouseDown = { this.rectMouseDown.bind(this) }

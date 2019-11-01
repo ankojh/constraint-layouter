@@ -11,13 +11,11 @@ class Rect extends Component {
   }
 
   render() { 
-
-    console.log(this.props.isWrtRect)
-
     return ( <div 
         onMouseDown={event=>{this.props.rectMouseDown(event, this.props.id)}}
         className={`cl-rect ${this.props.isSelected ? 'cl__selected' : '' } ${this.props.isWrtRect ? 'cl__wrt' : '' }`} 
         style={this.props.areaStyle}>
+          {this.props.id}
         </div> );
   }
 }

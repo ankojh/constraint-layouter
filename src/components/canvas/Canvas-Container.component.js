@@ -11,7 +11,8 @@ class CanvasContainer extends Component {
     this.state = {
       rects: [...rectData.rects],
       selectionId: null,
-      wrtRectIds: ['el1']
+      wrtRectIdsIsSet: false,
+      wrtRectIds: ['el2']
     };
   }
 
@@ -42,9 +43,6 @@ class CanvasContainer extends Component {
   }
   
   render() { 
-
-    console.log(this.state.selectionId);
-
     return ( <div 
               className = "cl-canvas-container">
                  <div
@@ -52,6 +50,8 @@ class CanvasContainer extends Component {
                     <Guides 
                       rectData={[...this.state.rects]}
                       selectionId={this.state.selectionId}
+                      wrtRectIds={this.state.wrtRectIds}
+                      wrtRectIdsIsSet={this.state.wrtRectIdsIsSet}
                       setWrtRectIds={this.setWrtRectIds.bind(this)}
                        />
 

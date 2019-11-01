@@ -6,8 +6,8 @@ class Guides extends Component {
   state = {  }
 
   guideData = {
-    rowGuides:[],
-    columnGuides:[]
+    row:{guides: [], wrtRectIds: []},
+    column:{guides: [], wrtRectIds: []}
   }
 
   constructor(){
@@ -26,15 +26,21 @@ class Guides extends Component {
   setGuideData(newProps){
 
     const selectedRectData = newProps.rectData.find(rectData=>rectData.id == newProps.selectionId);
+    let wrtRectIds = this.props.wrtRectIdsIsSet ? [...this.props.wrtRectIds] : []
 
     this.guideData = {
-      rowGuides: getRowGuides(newProps.rectData, selectedRectData),
-      columnGuides: getColumnGuides(newProps.rectData, selectedRectData)
+      row: getRowGuides(newProps.rectData, selectedRectData, wrtRectIds),
+      column: getColumnGuides(newProps.rectData, selectedRectData, wrtRectIds)
+    }
+
+    if (!this.props.wrtRectIdsIsSet){
+      // console.log(this.props.wrtRectIds, this.guideData.row.wrtRectIds, this.guideData.column.wrtRectIds)
+      // this.props.setWrtRectIds([...this.guideData.row.wrtRectIds, ...this.guideData.column.wrtRectIds]);
     }
   }
 
   getRowGuidesLines(){
-    return this.guideData.rowGuides.map((guideData,index) => {
+    return this.guideData.row.guides.map((guideData,index) => {
         return (
           <div
            key={index}
@@ -45,7 +51,7 @@ class Guides extends Component {
   }
 
   getColumnGuideLines(){
-    return this.guideData.columnGuides.map((guideData, index) => {
+    return this.guideData.column.guides.map((guideData, index) => {
         return (
           <div
            key={index}
