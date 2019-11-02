@@ -26,8 +26,6 @@ class Canvas extends Component {
   }
 
   getRectEls(){
-
-    // console.log(this.props);
     return this.props.rectData.map((data) => {
       const areaStyle = { gridArea: data.id }
       return (<Rect 

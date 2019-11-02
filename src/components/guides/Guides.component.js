@@ -33,10 +33,16 @@ class Guides extends Component {
       column: getColumnGuides(newProps.rectData, selectedRectData, wrtRectIds)
     }
 
-    if (!this.props.wrtRectIdsIsSet){
+    if (!this.props.wrtRectIdsIsSet) {
+      const newWrtRectIds = Array.from(new Set([...this.guideData.row.wrtRectIds, ...this.guideData.column.wrtRectIds]));
+
+      if (newWrtRectIds[0] != this.props.wrtRectIds[0]) {
+        this.props.setWrtRectIds(newWrtRectIds);
+      }
+
       // console.log(this.props.wrtRectIds, this.guideData.row.wrtRectIds, this.guideData.column.wrtRectIds)
-      // this.props.setWrtRectIds([...this.guideData.row.wrtRectIds, ...this.guideData.column.wrtRectIds]);
     }
+
   }
 
   getRowGuidesLines(){

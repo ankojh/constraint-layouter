@@ -12,10 +12,10 @@ class CanvasContainer extends Component {
       rects: [...rectData.rects],
       selectionId: null,
       wrtRectIdsIsSet: false,
-      wrtRectIds: ['el2']
+      wrtRectIds: []
     };
   }
-
+  
   updateState(stateProperty, value){
     const newState = {...this.state};
     newState[stateProperty] = value;
@@ -39,7 +39,7 @@ class CanvasContainer extends Component {
   }
 
   setWrtRectIds(newIds){
-    this.updateState('wrtRectId', newIds);
+    this.updateState('wrtRectIds', newIds);
   }
   
   render() { 
