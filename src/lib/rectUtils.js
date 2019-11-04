@@ -4,8 +4,8 @@ export function getClosestMatchedRect(selectedRect, matchedRects, rowOrColumn){
   {
     // console.log(selectedRect, matchedRects);
     const selectedCenter = {
-      x: (selectedRect.x + selectedRect.width) / 2,
-      y: (selectedRect.y + selectedRect.height) / 2
+      x: selectedRect.x + selectedRect.width / 2,
+      y: selectedRect.y + selectedRect.height / 2
     }
 
     let closestRowRect = null;
@@ -16,33 +16,44 @@ export function getClosestMatchedRect(selectedRect, matchedRects, rowOrColumn){
 
     if(matchedRects.length == 1){
       closestRowRect = matchedRects[0];
-      closestColumnRect = matchedRects[1];
+      closestColumnRect = matchedRects[0];
     }
     else{
-    
+      
       matchedRects.forEach(rect => {
-    
-        if(Math.abs(rect.x - selectedCenter.x) < closestRowRectDistance){
-          closestRowRectDistance = Math.abs(rect.x - selectedCenter.x);
-          closestRowRect = rect;
-        }
-        
-        if(Math.abs((rect.x + rect.width) - selectedCenter.x) < closestRowRectDistance){
-          closestRowRectDistance = Math.abs(rect.x - selectedCenter.x);
-          closestRowRect = rect;
-        }
-        
-        if(Math.abs(rect.y - selectedCenter.y) < closestColumnRectDistance){
-          closestColumnRectDistance = Math.abs(rect.y - selectedCenter.y);
+
+
+        if(Math.abs(rect.x - selectedCenter.x) < closestColumnRectDistance){
+          // console.log('c1');
+          closestColumnRectDistance = Math.abs(rect.x - selectedCenter.x);
           closestColumnRect = rect;
         }
         
-        if(Math.abs((rect.y + rect.width) - selectedCenter.y) < closestColumnRectDistance){
-          closestColumnRectDistance = Math.abs(rect.y - selectedCenter.y);
+        if(Math.abs((rect.x + rect.width) - selectedCenter.x) < closestColumnRectDistance){
+          // console.log('c2');
+          closestColumnRectDistance = Math.abs((rect.x + rect.width) - selectedCenter.x);
           closestColumnRect = rect;
+        }
+        
+        if(Math.abs(rect.y - selectedCenter.y) < closestRowRectDistance){
+          // console.log('c3');
+          closestRowRectDistance = Math.abs(rect.y - selectedCenter.y);
+          closestRowRect = rect;
+        }
+        
+        if(Math.abs((rect.y + rect.width) - selectedCenter.y) < closestRowRectDistance){
+          // console.log('c4')
+          closestRowRectDistance = Math.abs((rect.y + rect.width) - selectedCenter.y)
+          closestRowRect = rect;
         }
 
+        // console.log(rect.id, Math.abs(rect.x - selectedCenter.x), Math.abs((rect.x + rect.width) - selectedCenter.x), closestColumnRectDistance, closestColumnRect.id)
+
+
       });
+
+      // console.log(closestColumnRect.id, closestColumnRectDistance, rowOrColumn);
+
     }
 
 

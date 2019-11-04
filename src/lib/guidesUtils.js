@@ -10,7 +10,7 @@ export function getRowGuides(rectData, selectionRect, wrtRectIds) {
   const rowData = getRowDetails(rectData);
   const rowGuides = getPartGuides(rowData, selectionRect.id);
   
-  return getBestGuides(rectData, selectionRect, wrtRectIds, rowGuides, 'row');
+  return getBestGuides(rectData, selectionRect, wrtRectIds, rowGuides, 'column'); // column wise closest
 }
 
 
@@ -23,7 +23,7 @@ export function getColumnGuides(rectData, selectionRect, wrtRectIds) {
   const columnData = getColumnDetails(rectData);
   const columnGuides = getPartGuides(columnData, selectionRect.id);
 
-  return getBestGuides(rectData, selectionRect, wrtRectIds, columnGuides, 'column');
+  return getBestGuides(rectData, selectionRect, wrtRectIds, columnGuides, 'row'); // row wise closest
 }
 
 

@@ -9,8 +9,8 @@ export default {
     },
     {
       id: 'el2',
-      x: 300,
-      y: 350,
+      x: 500,
+      y: 100,
       width: 200,
       height: 200
     },
@@ -23,8 +23,8 @@ export default {
     },
     {
       id: 'el4',
-      x: 450,
-      y: 150,
+      x: 1050,
+      y: 100,
       width: 200,
       height: 300
     }
