@@ -11,14 +11,18 @@ class CanvasContainer extends Component {
     this.state = {
       rects: [...rectData.rects],
       selectionId: null,
+      mouseDownRectId: null,
       wrtRectIdsIsSet: false,
       wrtRectIds: []
     };
   }
   
-  updateState(stateProperty, value){
+  updateState(partialState){
     const newState = {...this.state};
-    newState[stateProperty] = value;
+    Object.keys(partialState).forEach(key=>{
+      newState[key] = partialState[key];
+    })
+
     this.setState(newState);
   }
 
@@ -31,36 +35,46 @@ class CanvasContainer extends Component {
     }
 
     newRectState[rectIndex] = rectDetail;
-    this.updateState('rects', newRectState);
+    this.updateState({rects:newRectState});
   }
 
   setSelectionId(newId){
-    this.updateState('selectionId', newId);
+    this.updateState({selectionId:newId});
+  }
+
+  setMouseDownRectId(newId){
+    this.updateState({mouseDownRectId:newId});
   }
 
   setWrtRectIds(newIds){
-    this.updateState('wrtRectIds', newIds);
+    this.updateState({wrtRectIds:newIds});
   }
   
   render() { 
+
+    console.log(this.state.selectionId, this.state.mouseDownRectId);
     return ( <div 
               className = "cl-canvas-container">
                  <div
                   className="cl-canvas__transform">
                     <Guides 
                       rectData={[...this.state.rects]}
-                      selectionId={this.state.selectionId}
                       wrtRectIds={this.state.wrtRectIds}
                       wrtRectIdsIsSet={this.state.wrtRectIdsIsSet}
                       setWrtRectIds={this.setWrtRectIds.bind(this)}
+                      mouseDownRectId={this.state.mouseDownRectId}
                        />
 
                     <Canvas 
                       rectData={[...this.state.rects]}
+                      mouseDownRectId={this.state.mouseDownRectId}
                       selectionId={this.state.selectionId}
                       wrtRectIds={this.state.wrtRectIds}
                       updateRectData={this.updateRectData.bind(this)}
-                      setSelectionId={this.setSelectionId.bind(this)} />
+                      setSelectionId={this.setSelectionId.bind(this)}
+                      setMouseDownRectId={this.setMouseDownRectId.bind(this)}
+                      updateState={this.updateState.bind(this)}
+                       />
                 </div>
             </div> );
   }

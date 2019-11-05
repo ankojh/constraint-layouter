@@ -30,6 +30,7 @@ class Canvas extends Component {
       const areaStyle = { gridArea: data.id }
       return (<Rect 
         isSelected ={data.id == this.props.selectionId}
+        isMouseDowned ={data.id == this.props.mouseDownRectId}
         isWrtRect = {this.props.wrtRectIds.includes(data.id)}
         areaStyle = {areaStyle}
         id = {data.id}
@@ -72,7 +73,8 @@ class Canvas extends Component {
       y: event.clientY
     };
 
-    this.props.setSelectionId(id);
+    this.props.updateState({selectionId:id,mouseDownRectId: id});
+    
   }
 
   rectMouseMove(event) {
@@ -116,7 +118,7 @@ class Canvas extends Component {
     this.rectsData = null;
     this.setRectsData = null;
     this.movingRectIndex = null;
-    this.props.setSelectionId(null);
+    this.props.setMouseDownRectId(null);
     // update the state on mouse up.
   }
 
