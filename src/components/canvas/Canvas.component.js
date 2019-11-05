@@ -118,12 +118,12 @@ class Canvas extends Component {
     this.rectsData = null;
     this.setRectsData = null;
     this.movingRectIndex = null;
-    this.props.setMouseDownRectId(null);
+    this.props.updateState({mouseDownRectId:null});
     // update the state on mouse up.
   }
 
   canvasMouseDowned(event){
-    this.props.setSelectionId(null);
+    this.props.updateState({selectionId:null});
   }
 
 

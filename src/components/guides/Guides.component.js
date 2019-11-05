@@ -37,7 +37,7 @@ class Guides extends Component {
       const newWrtRectIds = Array.from(new Set([...this.guideData.row.wrtRectIds, ...this.guideData.column.wrtRectIds]));
 
       if (newWrtRectIds[0] != this.props.wrtRectIds[0]) {
-        this.props.setWrtRectIds(newWrtRectIds);
+        this.props.updateState({wrtRectIds:newWrtRectIds});
       }
     }
 

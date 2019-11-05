@@ -11,7 +11,6 @@ class Rect extends Component {
   }
 
   render() { 
-    // console.log(this.props.isSelected);
     return ( <div 
         onMouseDown={event=>{this.props.rectMouseDown(event, this.props.id)}}
         className={`cl-rect ${this.props.isSelected ? 'cl__selected' : '' } ${this.props.isMouseDowned ? 'cl__selected' : '' } ${this.props.isWrtRect ? 'cl__wrt' : '' }`} 
