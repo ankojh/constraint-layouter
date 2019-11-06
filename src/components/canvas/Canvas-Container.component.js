@@ -15,6 +15,10 @@ class CanvasContainer extends Component {
       wrtRectIdsIsSet: false,
       wrtRectIds: []
     };
+
+    setTimeout(() => {
+      this.deleteRect('el1');
+    }, 1000);
   }
   
   updateState(partialState){
@@ -40,6 +44,19 @@ class CanvasContainer extends Component {
 
   setWrtRectIds(newIds){
     this.updateState({wrtRectIds:newIds});
+  }
+
+  addRect(){
+
+  }
+
+  deleteRect(rectId){
+    const rects =  [...this.state.rects];
+    const index = rects.findIndex(rectDetail=>rectId == rectDetail.id)
+    if(index>=0){
+      rects.splice(index,1);
+      this.updateState({rects})
+    }
   }
   
   render() { 
