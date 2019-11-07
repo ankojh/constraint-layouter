@@ -38,7 +38,9 @@ class App extends Component {
 
 
   keyDownHandler(event){
-    this.updateState({keyStatus: event.keyCode});
+    if(this.state.keyStatus!=event.keyCode){
+      this.updateState({keyStatus: event.keyCode});
+    }
   }
 
   keyUpHandler(event){
@@ -52,6 +54,8 @@ class App extends Component {
   }
 
   render() { 
+
+    console.log(this.state);
     return ( 
       <div className="App">
         <Toolbar />

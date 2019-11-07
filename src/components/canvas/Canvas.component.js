@@ -82,6 +82,14 @@ class Canvas extends Component {
 
     const diff = {x: currentPosition.x - this.previousMousePosition.x, y: currentPosition.y - this.previousMousePosition.y};
 
+    if(!this.props.moveConstraints.x){
+      diff.x = 0;
+    }
+
+    if(!this.props.moveConstraints.y){
+      diff.y = 0;
+    }
+
     this.rectsData = [...this.props.rectData];
 
     this.rectsData[this.movingRectIndex].x += diff.x;

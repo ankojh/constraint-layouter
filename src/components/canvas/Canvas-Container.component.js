@@ -6,6 +6,15 @@ import rectData from '../../data/basic-case'
 
 class CanvasContainer extends Component {
 
+  keyStatus = null;
+
+  keyMaps = {
+    '8': 'Delete',
+    '16': 'Shift',
+    '88': 'X',
+    '89': 'Y'
+  }
+
   constructor(){
     super();
     this.state = {
@@ -13,14 +22,68 @@ class CanvasContainer extends Component {
       selectionId: null,
       mouseDownRectId: null,
       wrtRectIdsIsSet: false,
-      wrtRectIds: []
+      wrtRectIds: [],
+      moveConstraints:{
+        x: true,
+        y: true
+      },
+      newRectMode: false
     };
-
-    setTimeout(() => {
-      this.deleteRect('el1');
-    }, 1000);
   }
-  
+
+  componentDidUpdate(){
+    if(this.checkForKeyStatusChange()){
+      this.handleKeyStatusChange();
+    }
+  }
+
+  handleKeyStatusChange(){
+    this.keyStatus = this.props.keyStatus;
+
+    if(!this.keyStatus){
+      this.updateState({
+        newRectMode: true,
+        moveConstraints: {
+          x: true,
+          y: true
+        }
+      })
+
+      return;
+    }
+
+    switch (this.keyStatus) {
+      case 8:
+        this.deleteHandler();
+        break;
+      case 16: 
+        this.updateState({newRectMode: true})
+        break;
+      case 88:
+        this.updateState({moveConstraints: {x: true, y: false}});
+        break;
+      case 89:
+        this.updateState({moveConstraints: {x: false, y: true}});
+        break;
+    }
+
+    // delete 8
+    // shift 16
+    // x 88
+    // y 89
+
+  }
+
+
+  deleteHandler(){
+
+  }
+
+
+  checkForKeyStatusChange(){
+    return this.keyStatus != this.props.keyStatus;
+  }
+
   updateState(partialState){
     const newState = {...this.state};
     Object.keys(partialState).forEach(key=>{
@@ -80,6 +143,7 @@ class CanvasContainer extends Component {
                       wrtRectIds={this.state.wrtRectIds}
                       updateRectData={this.updateRectData.bind(this)}
                       updateState={this.updateState.bind(this)} 
+                      moveConstraints={this.state.moveConstraints}
                        />
                 </div>
             </div> );
