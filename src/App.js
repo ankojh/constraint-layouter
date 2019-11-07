@@ -54,11 +54,9 @@ class App extends Component {
   }
 
   render() { 
-
-    console.log(this.state);
+    
     return ( 
-      <div className="App">
-        <Toolbar />
+      <div className="App"> 
         <CanvasContainer 
           keyStatus={this.state.keyStatus}
         />

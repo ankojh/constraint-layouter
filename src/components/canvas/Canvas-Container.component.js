@@ -3,6 +3,7 @@ import Canvas from './Canvas.component';
 import './Canvas-Container.css'
 import Guides from '../guides/Guides.component';
 import rectData from '../../data/basic-case'
+import { fromEvent } from 'rxjs';
 
 class CanvasContainer extends Component {
 
@@ -14,6 +15,11 @@ class CanvasContainer extends Component {
     '88': 'X',
     '89': 'Y'
   }
+
+  containerMouseMoveSubscription = null;
+  containerMouseUpSubscription = null;
+  newAreaId = null;
+  
 
   constructor(){
     super();
@@ -29,6 +35,8 @@ class CanvasContainer extends Component {
       },
       newRectMode: false
     };
+
+    this.canvas = React.createRef();
   }
 
   componentDidUpdate(){
@@ -42,7 +50,7 @@ class CanvasContainer extends Component {
 
     if(!this.keyStatus){
       this.updateState({
-        newRectMode: true,
+        newRectMode: false,
         moveConstraints: {
           x: true,
           y: true
@@ -75,10 +83,11 @@ class CanvasContainer extends Component {
   }
 
 
-  deleteHandler(){
-
+  deleteHandler() {
+    if(this.state.selectionId){
+      this.deleteRect(this.state.selectionId);
+    }
   }
-
 
   checkForKeyStatusChange(){
     return this.keyStatus != this.props.keyStatus;
@@ -109,10 +118,6 @@ class CanvasContainer extends Component {
     this.updateState({wrtRectIds:newIds});
   }
 
-  addRect(){
-
-  }
-
   deleteRect(rectId){
     const rects =  [...this.state.rects];
     const index = rects.findIndex(rectDetail=>rectId == rectDetail.id)
@@ -121,10 +126,97 @@ class CanvasContainer extends Component {
       this.updateState({rects})
     }
   }
+
+  addRect(rectDetails){ //x,y,width,height
+    const newRects = [...this.state.rects];
+    newRects.push(rectDetails);
+    this.updateState({rects: newRects})
+  }
+
+  containerMouseDownHandler(event){
+      if (event.target.classList.contains('cl-canvas') && this.state.newRectMode) {
+        const newAreaId = 'el' + (this.state.rects.length + 1);
+        this.addRect({
+          id: newAreaId,
+          x: event.clientX,
+          y: event.clientY,
+          width: 1,
+          height: 1
+        })
+
+        this.newAreaMouseDownPosition = {x: event.clientX,y: event.clientY}
+        this.newAreaId = newAreaId;
+      }
+
+      if (this.containerMouseMoveSubscription) {
+        this.containerMouseMoveSubscription.unsubscribe();
+      }
+
+      if (this.containerMouseUpSubscription) {
+        this.containerMouseUpSubscription.unsubscribe();
+      }
+
+      this.containerMouseMoveSubscription = fromEvent(event.currentTarget, 'mousemove').subscribe(e => {
+        this.containerMouseMoveHandler(e)
+      })
+      
+      this.containerMouseUpSubscription = fromEvent(event.currentTarget, 'mouseup').subscribe(e => {
+        this.containerMouseUpHandler(e)
+      })
+  }
+
+
+  updateRectData(rectId, newData){
+    const newRects = [...this.state.rects];
+    const updatingRect = newRects.find(rect=>rect.id == rectId);
+
+    updatingRect.x = newData.x;
+    updatingRect.y = newData.y;
+    updatingRect.width = newData.width;
+    updatingRect.height = newData.height;
+
+    this.updateState({rects: newRects});
+  }
+
+
+  containerMouseMoveHandler(event){
+    const dimensions = {
+        x: event.clientX - this.newAreaMouseDownPosition.x,
+        y: event.clientY - this.newAreaMouseDownPosition.y
+      }
+
+
+      const position = {
+        x: dimensions.x < 0 ? this.newAreaMouseDownPosition.x + dimensions.x : this.newAreaMouseDownPosition.x,
+        y: dimensions.y < 0 ? this.newAreaMouseDownPosition.y + dimensions.y : this.newAreaMouseDownPosition.y,
+      }
+
+
+    this.updateRectData(this.newAreaId, {
+      x: position.x,
+      y: position.y,
+      width: Math.abs(dimensions.x),
+      height: Math.abs(dimensions.y)
+    });
+  }
+
+  containerMouseUpHandler(event){
+
+    this.newAreaMouseDownPosition = null;
+
+    this.containerMouseMoveSubscription.unsubscribe();
+    this.containerMouseUpSubscription.unsubscribe();
+
+    this.containerMouseMoveSubscription = null;
+    this.containerMouseUpSubscription = null;
+    this.newAreaId = null;
+  }
   
   render() { 
+
     return ( <div 
-              className = "cl-canvas-container">
+              className = "cl-canvas-container"
+              onMouseDown={this.containerMouseDownHandler.bind(this)}>
                  <div
                   className="cl-canvas__transform">
                     <Guides 
@@ -137,6 +229,7 @@ class CanvasContainer extends Component {
                        />
 
                     <Canvas 
+                      ref={this.canvas}
                       rectData={[...this.state.rects]}
                       mouseDownRectId={this.state.mouseDownRectId}
                       selectionId={this.state.selectionId}
