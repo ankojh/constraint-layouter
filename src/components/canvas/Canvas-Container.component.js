@@ -18,7 +18,7 @@ class CanvasContainer extends Component {
 
   containerMouseMoveSubscription = null;
   containerMouseUpSubscription = null;
-  newAreaId = null;
+  newRectId = null;
   
 
   constructor(){
@@ -135,9 +135,9 @@ class CanvasContainer extends Component {
 
   containerMouseDownHandler(event){
       if (event.target.classList.contains('cl-canvas') && this.state.newRectMode) {
-        const newAreaId = 'el' + (this.state.rects.length + 1);
+        const newRectId = 'el' + (this.state.rects.length + 1);
         this.addRect({
-          id: newAreaId,
+          id: newRectId,
           x: event.clientX,
           y: event.clientY,
           width: 1,
@@ -145,7 +145,7 @@ class CanvasContainer extends Component {
         })
 
         this.newAreaMouseDownPosition = {x: event.clientX,y: event.clientY}
-        this.newAreaId = newAreaId;
+        this.newRectId = newRectId;
       }
 
       if (this.containerMouseMoveSubscription) {
@@ -166,7 +166,7 @@ class CanvasContainer extends Component {
   }
 
 
-  updateRectData(rectId, newData){
+  updateDataOfRect(rectId, newData){
     const newRects = [...this.state.rects];
     const updatingRect = newRects.find(rect=>rect.id == rectId);
 
@@ -180,7 +180,9 @@ class CanvasContainer extends Component {
 
 
   containerMouseMoveHandler(event){
-    const dimensions = {
+
+    if(this.state.newRectMode){
+      const dimensions = {
         x: event.clientX - this.newAreaMouseDownPosition.x,
         y: event.clientY - this.newAreaMouseDownPosition.y
       }
@@ -192,12 +194,13 @@ class CanvasContainer extends Component {
       }
 
 
-    this.updateRectData(this.newAreaId, {
-      x: position.x,
-      y: position.y,
-      width: Math.abs(dimensions.x),
-      height: Math.abs(dimensions.y)
-    });
+      this.updateDataOfRect(this.newRectId, {
+        x: position.x,
+        y: position.y,
+        width: Math.abs(dimensions.x) != 0 ? Math.abs(dimensions.x): 1,
+        height: Math.abs(dimensions.y) != 0 ? Math.abs(dimensions.y) : 1,
+      });
+    }
   }
 
   containerMouseUpHandler(event){
@@ -209,7 +212,7 @@ class CanvasContainer extends Component {
 
     this.containerMouseMoveSubscription = null;
     this.containerMouseUpSubscription = null;
-    this.newAreaId = null;
+    this.newRectId = null;
   }
   
   render() { 
