@@ -36,8 +36,17 @@ class Guides extends Component {
     if (!this.props.wrtRectIdsIsSet) {
       const newWrtRectIds = Array.from(new Set([...this.guideData.row.wrtRectIds, ...this.guideData.column.wrtRectIds]));
 
-      if (newWrtRectIds[0] != this.props.wrtRectIds[0]) {
-        this.props.updateState({wrtRectIds:newWrtRectIds});
+      const guidesStatus = {
+          x: this.guideData.column.wrtRectIds.length ? true : false,
+          y: this.guideData.row.wrtRectIds.length ? true : false
+        };
+
+
+      if (newWrtRectIds[0] != this.props.wrtRectIds[0] || newWrtRectIds.length != this.props.wrtRectIds.length) {
+        this.props.updateState({
+          wrtRectIds:newWrtRectIds,
+          guidesStatus 
+        });
       }
     }
 

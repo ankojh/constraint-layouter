@@ -90,18 +90,26 @@ class Canvas extends Component {
       diff.y = 0;
     }
 
+    if (this.props.guidesStatus.x && Math.abs(diff.x) < 10){ 
+      diff.x = 0;
+    }
+    else{
+      this.previousMousePosition.x = event.clientX;
+    }
+    
+    if (this.props.guidesStatus.y && Math.abs(diff.y) < 10) {
+      diff.y = 0;
+    }
+    else{
+      this.previousMousePosition.y = event.clientY;
+    }
+
     this.rectsData = [...this.props.rectData];
 
     this.rectsData[this.movingRectIndex].x += diff.x;
     this.rectsData[this.movingRectIndex].y += diff.y;
 
     this.props.updateRectData(this.movingRectIndex,this.rectsData[this.movingRectIndex]);
-
-
-    this.previousMousePosition = {
-      x: event.clientX,
-      y: event.clientY
-    };
   }
 
   rectMouseUp(event) {

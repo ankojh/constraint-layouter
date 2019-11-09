@@ -19,6 +19,8 @@ class CanvasContainer extends Component {
   containerMouseMoveSubscription = null;
   containerMouseUpSubscription = null;
   newRectId = null;
+
+  idCounter = 1;
   
 
   constructor(){
@@ -28,6 +30,10 @@ class CanvasContainer extends Component {
       selectionId: null,
       mouseDownRectId: null,
       wrtRectIdsIsSet: false,
+      guidesStatus:{
+        x: false,
+        y: false
+      },
       wrtRectIds: [],
       moveConstraints:{
         x: true,
@@ -35,6 +41,8 @@ class CanvasContainer extends Component {
       },
       newRectMode: false
     };
+
+    this.idCounter = this.state.rects.length;
 
     this.canvas = React.createRef();
   }
@@ -135,7 +143,7 @@ class CanvasContainer extends Component {
 
   containerMouseDownHandler(event){
       if (event.target.classList.contains('cl-canvas') && this.state.newRectMode) {
-        const newRectId = 'el' + (this.state.rects.length + 1);
+        const newRectId = 'el' + (++this.idCounter);
         this.addRect({
           id: newRectId,
           x: event.clientX,
@@ -240,6 +248,7 @@ class CanvasContainer extends Component {
                       updateRectData={this.updateRectData.bind(this)}
                       updateState={this.updateState.bind(this)} 
                       moveConstraints={this.state.moveConstraints}
+                      guidesStatus={this.state.guidesStatus}
                        />
                 </div>
             </div> );
