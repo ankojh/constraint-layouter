@@ -112,13 +112,19 @@ class CanvasContainer extends Component {
 
   updateRectData(rectIndex, rectDetail){
     const newRectState = [...this.state.rects];
+    newRectState[rectIndex] = rectDetail;
+
 
     if(rectDetail.x<0 || rectDetail.y <0){
-      console.warn("negatives"); //handle it later
-      return;
-    }
 
-    newRectState[rectIndex] = rectDetail;
+      const xOffSet = rectDetail.x < 0 ? rectDetail.x : 0;
+      const yOffSet = rectDetail.y < 0 ? rectDetail.y : 0;
+      
+      newRectState.forEach(data=>{
+        data.x += (-xOffSet);
+        data.y += (-yOffSet);
+      })
+    }
     this.updateState({rects:newRectState});
   }
 
@@ -224,7 +230,7 @@ class CanvasContainer extends Component {
   }
   
   render() { 
-
+    // console.log(this.state.rects[0])
     return ( <div 
               className = "cl-canvas-container"
               onMouseDown={this.containerMouseDownHandler.bind(this)}>
