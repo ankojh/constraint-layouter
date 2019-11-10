@@ -90,8 +90,6 @@ class Canvas extends Component {
       diff.y = 0;
     }
 
-
-    console.log(this.props.guidesStatus);
     if (this.props.guidesStatus.x && Math.abs(diff.x) < 10){ 
       diff.x = 0;
     }

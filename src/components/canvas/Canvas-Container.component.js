@@ -26,8 +26,17 @@ class CanvasContainer extends Component {
 
   constructor(){
     super();
+
+    let rects = [...rectData.rects];
+    if(localStorage.rects){
+      rects = JSON.parse(localStorage.rects);
+    }
+    else{
+      localStorage.rects = JSON.stringify(rects);
+    }
+    
     this.state = {
-      rects: [...rectData.rects],
+      rects: rects,
       selectionId: null,
       mouseDownRectId: null,
       wrtRectIdsIsSet: false,
@@ -52,6 +61,8 @@ class CanvasContainer extends Component {
     if(this.checkForKeyStatusChange()){
       this.handleKeyStatusChange();
     }
+
+    localStorage.rects = JSON.stringify(this.state.rects);
   }
 
   handleKeyStatusChange(){
@@ -269,6 +280,7 @@ class CanvasContainer extends Component {
                       setWrtRectIds={this.setWrtRectIds.bind(this)}
                       mouseDownRectId={this.state.mouseDownRectId}
                       updateState={this.updateState.bind(this)} 
+                      guidesStatus={this.state.guidesStatus}
                        />
 
                     <Canvas 
