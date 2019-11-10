@@ -13,7 +13,8 @@ class CanvasContainer extends Component {
     '8': 'Delete',
     '16': 'Shift',
     '88': 'X',
-    '89': 'Y'
+    '89': 'Y',
+    '68': 'D'
   }
 
   containerMouseMoveSubscription = null;
@@ -81,6 +82,9 @@ class CanvasContainer extends Component {
       case 89:
         this.updateState({moveConstraints: {x: false, y: true}});
         break;
+      case 68:
+        this.duplicateRect();
+         break;
     }
 
     // delete 8
@@ -90,6 +94,25 @@ class CanvasContainer extends Component {
 
   }
 
+
+  duplicateRect(){
+    if(!this.state.selectionId){
+      return;
+    }
+
+    const rect = {...this.state.rects.find(rectData=>rectData.id == this.state.selectionId)};
+
+
+
+    rect.x+=10;
+    rect.y+=10;
+
+    const rectId = this.addRect(rect);
+
+    setTimeout(() => {
+      this.updateState({selectionId: rectId});
+    }, 1);
+  }
 
   deleteHandler() {
     if(this.state.selectionId){
@@ -143,15 +166,19 @@ class CanvasContainer extends Component {
 
   addRect(rectDetails){ //x,y,width,height
     const newRects = [...this.state.rects];
+    const newRectId = 'el' + (++this.idCounter);
+    
+    rectDetails.id = newRectId;
     newRects.push(rectDetails);
+
+    this.newRectId = newRectId;
     this.updateState({rects: newRects})
+    return newRectId;
   }
 
   containerMouseDownHandler(event){
       if (event.target.classList.contains('cl-canvas') && this.state.newRectMode) {
-        const newRectId = 'el' + (++this.idCounter);
         this.addRect({
-          id: newRectId,
           x: event.clientX,
           y: event.clientY,
           width: 1,
@@ -159,7 +186,6 @@ class CanvasContainer extends Component {
         })
 
         this.newAreaMouseDownPosition = {x: event.clientX,y: event.clientY}
-        this.newRectId = newRectId;
       }
 
       if (this.containerMouseMoveSubscription) {

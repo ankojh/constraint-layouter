@@ -42,7 +42,9 @@ class Guides extends Component {
         };
 
 
-      if (newWrtRectIds[0] != this.props.wrtRectIds[0] || newWrtRectIds.length != this.props.wrtRectIds.length) {
+      //  console.log(guidesStatus);
+
+      if (newWrtRectIds[0] != this.props.wrtRectIds[0] || newWrtRectIds.length != this.props.wrtRectIds.length) { //fix this condition
         this.props.updateState({
           wrtRectIds:newWrtRectIds,
           guidesStatus 
