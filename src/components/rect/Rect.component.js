@@ -15,7 +15,7 @@ class Rect extends Component {
         onMouseDown={event=>{this.props.rectMouseDown(event, this.props.id)}}
         className={`cl-rect ${this.props.isSelected ? 'cl__selected' : '' } ${this.props.isMouseDowned ? 'cl__selected' : '' } ${this.props.isWrtRect ? 'cl__wrt' : '' }`} 
         style={this.props.areaStyle}>
-          {/* {this.props.id} */}
+        
         </div> );
   }
 }
