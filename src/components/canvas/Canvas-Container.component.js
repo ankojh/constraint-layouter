@@ -12,6 +12,7 @@ class CanvasContainer extends Component {
   keyMaps = {
     '8': 'Delete',
     '16': 'Shift',
+    '81': 'Q',
     '88': 'X',
     '89': 'Y',
     '68': 'D'
@@ -28,6 +29,8 @@ class CanvasContainer extends Component {
     super();
 
     let rects = [...rectData.rects];
+
+
     if(localStorage.rects){
       rects = JSON.parse(localStorage.rects);
     }
@@ -87,6 +90,9 @@ class CanvasContainer extends Component {
       case 16: 
         this.updateState({newRectMode: true})
         break;
+      case 81:
+        this.removeAll();
+        break;
       case 88:
         this.updateState({moveConstraints: {x: true, y: false}});
         break;
@@ -105,6 +111,10 @@ class CanvasContainer extends Component {
 
   }
 
+
+  removeAll(){
+    this.updateState({rects: []});
+  }
 
   duplicateRect(){
     if(!this.state.selectionId){
