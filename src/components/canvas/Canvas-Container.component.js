@@ -21,6 +21,7 @@ class CanvasContainer extends Component {
   containerMouseMoveSubscription = null;
   containerMouseUpSubscription = null;
   newRectId = null;
+  isMouseDowned = false;
 
   idCounter = 1;
   
@@ -64,7 +65,7 @@ class CanvasContainer extends Component {
     if(this.checkForKeyStatusChange()){
       this.handleKeyStatusChange();
     }
-
+  
     localStorage.rects = JSON.stringify(this.state.rects);
   }
 
@@ -88,7 +89,7 @@ class CanvasContainer extends Component {
         this.deleteHandler();
         break;
       case 16: 
-        this.updateState({newRectMode: true})
+        !this.isMouseDowned && this.updateState({newRectMode: true});
         break;
       case 81:
         this.removeAll();
@@ -198,6 +199,7 @@ class CanvasContainer extends Component {
   }
 
   containerMouseDownHandler(event){
+    this.isMouseDowned = true;
       if (event.target.classList.contains('cl-canvas') && this.state.newRectMode) {
         this.addRect({
           x: event.clientX,
@@ -266,6 +268,7 @@ class CanvasContainer extends Component {
 
   containerMouseUpHandler(event){
 
+    this.isMouseDowned = false;
     this.newAreaMouseDownPosition = null;
 
     this.containerMouseMoveSubscription.unsubscribe();
