@@ -15,7 +15,8 @@ class CanvasContainer extends Component {
     '81': 'Q',
     '88': 'X',
     '89': 'Y',
-    '68': 'D'
+    '68': 'D',
+    '65': 'A'
   }
 
   containerMouseMoveSubscription = null;
@@ -53,7 +54,8 @@ class CanvasContainer extends Component {
         x: true,
         y: true
       },
-      newRectMode: false
+      newRectMode: false,
+      isResizing: false
     };
 
     this.idCounter = this.state.rects.length;
@@ -75,6 +77,7 @@ class CanvasContainer extends Component {
     if(!this.keyStatus){
       this.updateState({
         newRectMode: false,
+        isResizing: false,
         moveConstraints: {
           x: true,
           y: true
@@ -102,6 +105,9 @@ class CanvasContainer extends Component {
         break;
       case 68:
         this.duplicateRect();
+         break;
+      case 65:
+        this.updateState({isResizing: true});
          break;
     }
 
@@ -306,6 +312,7 @@ class CanvasContainer extends Component {
                       updateState={this.updateState.bind(this)} 
                       moveConstraints={this.state.moveConstraints}
                       guidesStatus={this.state.guidesStatus}
+                      isResizing={this.state.isResizing}
                        />
                 </div>
             </div> );

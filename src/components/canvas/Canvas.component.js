@@ -5,6 +5,7 @@ import { throttleTime } from 'rxjs/operators';
 
 import { getGridStyle } from './../../lib/gridUtils'
 import Rect from '../rect/Rect.component'
+import Resizer from '../rect/Resizer.component'
 
 class Canvas extends Component {
 
@@ -20,9 +21,12 @@ class Canvas extends Component {
 
   diffPosition = {x:0, y:0};
 
-
   constructor(){
     super();
+  }
+
+  getResizer(){
+    return (<Resizer areaName={this.props.selectionId} isResizing={this.props.isResizing}/>)
   }
 
   getRectEls(){
@@ -151,6 +155,7 @@ class Canvas extends Component {
               onMouseDown={e=>{this.canvasMouseDowned(e)}}
               style={gridStyle}>
                 {this.getRectEls()}
+                {this.getResizer()}
               </div> );
   }
 }

@@ -1,0 +1,84 @@
+.cl-resizer{
+  position: relative;
+  z-index: 1000;
+}
+
+.cl-resizer__left{
+  position: absolute;
+  /* background: red; */
+  height: 100%;
+  width: 10px;
+  left: -5px;
+  top: 0px;
+  cursor: ew-resize;
+}
+
+.cl-resizer__top{
+  position: absolute;
+  /* background: red; */
+  height: 10px;
+  width: 100%;
+  left: 0px;
+  top: -5px;
+  cursor: ns-resize
+}
+
+.cl-resizer__right{
+  position: absolute;
+  /* background: red; */
+  height: 100%;
+  width: 10px;
+  right: -5px;
+  top: 0px;
+  cursor: ew-resize;
+}
+
+.cl-resizer__bottom{
+  position: absolute;
+  /* background: red; */
+  height: 10px;
+  width: 100%;
+  left: 0px;
+  bottom: -5px;
+  cursor: ns-resize
+}
+
+.cl-resizer__top-left{
+  position: absolute;
+  /* background: blue; */
+  width:10px;
+  height:10px;
+  top:-5px;
+  left: -5px;
+  cursor: nwse-resize;
+}
+
+.cl-resizer__top-right{
+  position: absolute;
+  /* background: blue; */
+  width:10px;
+  height:10px;
+  top:-5px;
+  right: -5px;
+  cursor: nesw-resize;
+}
+
+.cl-resizer__bottom-left{
+  position: absolute;
+  /* background: blue; */
+  width:10px;
+  height:10px;
+  bottom:-5px;
+  left: -5px;
+  cursor: nesw-resize;
+}
+
+.cl-resizer__bottom-right{
+  position: absolute;
+  /* background: blue; */
+  width:10px;
+  height:10px;
+  bottom:-5px;
+  right: -5px;
+  cursor: nwse-resize;
+}
