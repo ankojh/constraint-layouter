@@ -16,13 +16,19 @@ class CanvasContainer extends Component {
     '88': 'X',
     '89': 'Y',
     '68': 'D',
-    '65': 'A'
+    '65': 'A',
+    '82': 'R'
   }
 
   containerMouseMoveSubscription = null;
   containerMouseUpSubscription = null;
+  
+  resizerMouseMoveSubscription = null;
+  resizerMouseUpSubscription = null;
+
   newRectId = null;
   isMouseDowned = false;
+  resizingRect = null;
 
   idCounter = 1;
   
@@ -62,6 +68,7 @@ class CanvasContainer extends Component {
 
     this.canvas = React.createRef();
   }
+
 
   componentDidUpdate(){
     if(this.checkForKeyStatusChange()){
@@ -106,7 +113,7 @@ class CanvasContainer extends Component {
       case 68:
         this.duplicateRect();
          break;
-      case 65:
+      case 82:
         this.updateState({isResizing: true});
          break;
     }
@@ -116,6 +123,63 @@ class CanvasContainer extends Component {
     // x 88
     // y 89
 
+  }
+
+  resizeHandler(mouseDownPosition, resizeType){
+    this.resizingRect = this.state.rects.find(rect => rect.id == this.state.selectionId);
+
+    this.resizerMouseMoveSubscription = fromEvent(document.body, "mousemove").subscribe(event => {
+         this.resizerMoveHandler(event, mouseDownPosition, resizeType);
+       })
+   
+    this.resizerMouseUpSubscription = fromEvent(document.body, "mouseup").subscribe(event => {
+         this.resizerUpHandler();
+       })
+
+  }
+
+  resizerMoveHandler(event, mouseDownPosition, resizerType) {
+    const newRects = [...this.state.rects]; 
+    const currentMousePosition = {x: event.clientX, y: event.clientY};
+    const diff = {x: event.clientX - mouseDownPosition.x, y: event.clientY - mouseDownPosition.y};
+    const rect = newRects.find(rect => rect.id == this.state.selectionId);
+
+    if(resizerType == "left"){
+      rect.x+=diff.x;
+      console.log(rect);
+      this.updateRectData({rects: newRects});
+    }
+    else if(resizerType == "top"){
+
+    }
+    else if(resizerType == "right"){
+
+    }
+    else if(resizerType == "bottom"){
+
+    }
+    else if (resizerType == "topLeft") {
+
+    }
+    else if (resizerType == "topRight") {
+
+    }
+    else if (resizerType == "bottomLeft") {
+
+    }
+    else if (resizerType == "bottomRight") {
+
+    }
+
+
+  }
+
+  resizerUpHandler(){
+    this.resizerMouseMoveSubscription.unsubscribe();
+    this.resizerMouseUpSubscription.unsubscribe();
+
+    this.resizerMouseMoveSubscription = null;
+    this.resizerMouseUpSubscription = null;
   }
 
 
@@ -313,6 +377,7 @@ class CanvasContainer extends Component {
                       moveConstraints={this.state.moveConstraints}
                       guidesStatus={this.state.guidesStatus}
                       isResizing={this.state.isResizing}
+                      resizeHandler={this.resizeHandler.bind(this)}
                        />
                 </div>
             </div> );

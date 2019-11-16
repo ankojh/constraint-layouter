@@ -26,7 +26,12 @@ class Canvas extends Component {
   }
 
   getResizer(){
-    return (<Resizer areaName={this.props.selectionId} isResizing={this.props.isResizing}/>)
+    return (
+    <Resizer 
+      areaName={this.props.selectionId}
+      isResizing={this.props.isResizing}
+      resizeHandler={this.resizeHandler.bind(this)}
+      />)
   }
 
   getRectEls(){
@@ -44,6 +49,9 @@ class Canvas extends Component {
     })
   }
 
+  resizeHandler(mouseDownPosition, resizerType) {
+    this.props.resizeHandler(mouseDownPosition, resizerType);
+  }
 
   rectMouseDown(event, id) {
     event.stopPropagation();
