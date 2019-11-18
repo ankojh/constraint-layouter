@@ -25,6 +25,7 @@ class CanvasContainer extends Component {
   
   resizerMouseMoveSubscription = null;
   resizerMouseUpSubscription = null;
+  resizerCurrentMousePosition = null;
 
   newRectId = null;
   isMouseDowned = false;
@@ -140,37 +141,53 @@ class CanvasContainer extends Component {
 
   resizerMoveHandler(event, mouseDownPosition, resizerType) {
     const newRects = [...this.state.rects]; 
-    const currentMousePosition = {x: event.clientX, y: event.clientY};
-    const diff = {x: event.clientX - mouseDownPosition.x, y: event.clientY - mouseDownPosition.y};
+
+    if(!this.resizerCurrentMousePosition){
+      this.resizerCurrentMousePosition = {...mouseDownPosition};
+    }
+
+    // const currentMousePosition = {x;}
+    const diff = {x: event.clientX - this.resizerCurrentMousePosition.x, y: event.clientY - this.resizerCurrentMousePosition.y};
     const rect = newRects.find(rect => rect.id == this.state.selectionId);
 
+    this.resizerCurrentMousePosition = {x: event.clientX, y:event.clientY};
+
     if(resizerType == "left"){
-      rect.x+=diff.x;
-      console.log(rect);
-      this.updateRectData({rects: newRects});
+      rect.x += diff.x;
+      rect.width -= diff.x;
     }
     else if(resizerType == "top"){
-
+      rect.y += diff.y;
+      rect.height -= diff.y;
     }
     else if(resizerType == "right"){
-
+      rect.width += diff.x;
     }
     else if(resizerType == "bottom"){
-
+      rect.height += diff.y;
     }
     else if (resizerType == "topLeft") {
-
+      rect.x += diff.x;
+      rect.width -= diff.x;
+      rect.y += diff.y;
+      rect.height -= diff.y;
     }
     else if (resizerType == "topRight") {
-
+      rect.width += diff.x;
+      rect.y += diff.y;
+      rect.height -= diff.y;
     }
     else if (resizerType == "bottomLeft") {
-
+      rect.height += diff.y;
+      rect.x += diff.x;
+      rect.width -= diff.x;
     }
     else if (resizerType == "bottomRight") {
-
+      rect.height += diff.y;
+      rect.width += diff.x;
     }
 
+    this.updateState({rects: newRects});
 
   }
 
@@ -180,6 +197,8 @@ class CanvasContainer extends Component {
 
     this.resizerMouseMoveSubscription = null;
     this.resizerMouseUpSubscription = null;
+
+    this.resizerCurrentMousePosition = null;
   }
 
 
