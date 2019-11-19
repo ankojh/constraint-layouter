@@ -117,13 +117,7 @@ class CanvasContainer extends Component {
       case 82:
         this.updateState({isResizing: true});
          break;
-    }
-
-    // delete 8
-    // shift 16
-    // x 88
-    // y 89
-
+    } 
   }
 
   resizeHandler(mouseDownPosition, resizeType){
@@ -146,46 +140,46 @@ class CanvasContainer extends Component {
       this.resizerCurrentMousePosition = {...mouseDownPosition};
     }
 
-    // const currentMousePosition = {x;}
     const diff = {x: event.clientX - this.resizerCurrentMousePosition.x, y: event.clientY - this.resizerCurrentMousePosition.y};
     const rect = newRects.find(rect => rect.id == this.state.selectionId);
 
     this.resizerCurrentMousePosition = {x: event.clientX, y:event.clientY};
 
-    if(resizerType == "left"){
+
+    if(resizerType.includes("left")){
       rect.x += diff.x;
       rect.width -= diff.x;
     }
-    else if(resizerType == "top"){
+    if (resizerType.includes("top")) {
       rect.y += diff.y;
       rect.height -= diff.y;
     }
-    else if(resizerType == "right"){
+    if (resizerType.includes("right")) {
       rect.width += diff.x;
     }
-    else if(resizerType == "bottom"){
+    if (resizerType.includes("bottom")) {
       rect.height += diff.y;
     }
-    else if (resizerType == "topLeft") {
-      rect.x += diff.x;
-      rect.width -= diff.x;
-      rect.y += diff.y;
-      rect.height -= diff.y;
-    }
-    else if (resizerType == "topRight") {
-      rect.width += diff.x;
-      rect.y += diff.y;
-      rect.height -= diff.y;
-    }
-    else if (resizerType == "bottomLeft") {
-      rect.height += diff.y;
-      rect.x += diff.x;
-      rect.width -= diff.x;
-    }
-    else if (resizerType == "bottomRight") {
-      rect.height += diff.y;
-      rect.width += diff.x;
-    }
+    // else if (resizerType == "topLeft") {
+    //   rect.x += diff.x;
+    //   rect.width -= diff.x;
+    //   rect.y += diff.y;
+    //   rect.height -= diff.y;
+    // }
+    // else if (resizerType == "topRight") {
+    //   rect.width += diff.x;
+    //   rect.y += diff.y;
+    //   rect.height -= diff.y;
+    // }
+    // else if (resizerType == "bottomLeft") {
+    //   rect.height += diff.y;
+    //   rect.x += diff.x;
+    //   rect.width -= diff.x;
+    // }
+    // else if (resizerType == "bottomRight") {
+    //   rect.height += diff.y;
+    //   rect.width += diff.x;
+    // }
 
     this.updateState({rects: newRects});
 
@@ -212,8 +206,6 @@ class CanvasContainer extends Component {
     }
 
     const rect = {...this.state.rects.find(rectData=>rectData.id == this.state.selectionId)};
-
-
 
     rect.x+=10;
     rect.y+=10;
@@ -355,8 +347,7 @@ class CanvasContainer extends Component {
     }
   }
 
-  containerMouseUpHandler(event){
-
+  containerMouseUpHandler(){
     this.isMouseDowned = false;
     this.newAreaMouseDownPosition = null;
 
@@ -369,7 +360,6 @@ class CanvasContainer extends Component {
   }
   
   render() { 
-    // console.log(this.state.rects[0])
     return ( <div 
               className = "cl-canvas-container"
               onMouseDown={this.containerMouseDownHandler.bind(this)}>
