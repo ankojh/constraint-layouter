@@ -160,27 +160,7 @@ class CanvasContainer extends Component {
     if (resizerType.includes("bottom")) {
       rect.height += diff.y;
     }
-    // else if (resizerType == "topLeft") {
-    //   rect.x += diff.x;
-    //   rect.width -= diff.x;
-    //   rect.y += diff.y;
-    //   rect.height -= diff.y;
-    // }
-    // else if (resizerType == "topRight") {
-    //   rect.width += diff.x;
-    //   rect.y += diff.y;
-    //   rect.height -= diff.y;
-    // }
-    // else if (resizerType == "bottomLeft") {
-    //   rect.height += diff.y;
-    //   rect.x += diff.x;
-    //   rect.width -= diff.x;
-    // }
-    // else if (resizerType == "bottomRight") {
-    //   rect.height += diff.y;
-    //   rect.width += diff.x;
-    // }
-
+    
     this.updateState({rects: newRects});
 
   }
