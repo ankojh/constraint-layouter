@@ -17,7 +17,11 @@ class CanvasContainer extends Component {
     '89': 'Y',
     '68': 'D',
     '65': 'A',
-    '82': 'R'
+    '82': 'R',
+    '37': 'Left',
+    '38': 'Top',
+    '39': 'Right',
+    '40': 'Bottom'
   }
 
   containerMouseMoveSubscription = null;
@@ -117,6 +121,18 @@ class CanvasContainer extends Component {
       case 82:
         this.updateState({isResizing: true});
          break;
+      case 37:
+        this.arrowKeyMoveHandler('left');
+         break;
+      case 38:
+        this.arrowKeyMoveHandler('top');
+         break;
+      case 39:
+        this.arrowKeyMoveHandler('right');
+         break;
+      case 40:
+        this.arrowKeyMoveHandler('bottom');
+         break;
     } 
   }
 
@@ -160,7 +176,7 @@ class CanvasContainer extends Component {
     if (resizerType.includes("bottom")) {
       rect.height += diff.y;
     }
-    
+
     this.updateState({rects: newRects});
 
   }
@@ -337,6 +353,40 @@ class CanvasContainer extends Component {
     this.containerMouseMoveSubscription = null;
     this.containerMouseUpSubscription = null;
     this.newRectId = null;
+  }
+
+  arrowKeyMoveHandler(keyType){
+
+    const newRectState = [...this.state.rects];
+    const rect = newRectState.find(rect => rect.id == this.state.selectionId);
+
+    if(!rect){
+      return;
+    }
+
+    if(keyType == 'left'){
+      rect.x -= 1;
+    }
+    else if(keyType == 'top'){
+      rect.y -= 1;
+    }
+    else if(keyType == 'right'){
+      rect.x += 1;
+    }
+    else if(keyType == 'bottom'){
+      rect.y += 1;
+    }
+
+    this.updateState({
+        mouseDownRectId: rect.id,
+        rects: newRectState
+    });
+    
+    setTimeout(() => {
+      this.updateState({
+        mouseDownRectId: null,
+      })
+    }, 1000);
   }
   
   render() { 

@@ -26,6 +26,9 @@ class Guides extends Component {
   setGuideData(newProps){
 
     const selectedRectData = newProps.rectData.find(rectData=>rectData.id == newProps.mouseDownRectId);
+
+    console.log(selectedRectData);
+
     let wrtRectIds = this.props.wrtRectIdsIsSet ? [...this.props.wrtRectIds] : []
 
     this.guideData = {

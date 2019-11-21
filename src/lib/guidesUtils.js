@@ -36,7 +36,10 @@ function getBestGuides(rectData, selectionRect, wrtRectIds, partGuides, rowOrCol
 
   const guidesWrtRect = partGuides.filter(partGuideData => wrtRectIds.includes(partGuideData.id));
 
+  // console.log(guidesWrtRect);
+
   return guidesWrtRect.length ? {guides:[guidesWrtRect[0]], wrtRectIds} : {guides:[], wrtRectIds}
+  // return guidesWrtRect.length ? {guides:guidesWrtRect, wrtRectIds} : {guides:[], wrtRectIds}
 }
 
 
