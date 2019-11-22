@@ -21,7 +21,8 @@ class CanvasContainer extends Component {
     '37': 'Left',
     '38': 'Top',
     '39': 'Right',
-    '40': 'Bottom'
+    '40': 'Bottom',
+    '13': 'Enter'
   }
 
   containerMouseMoveSubscription = null;
@@ -36,6 +37,8 @@ class CanvasContainer extends Component {
   resizingRect = null;
 
   idCounter = 1;
+
+  arrowMoveTimeout = null;
   
 
   constructor(){
@@ -85,7 +88,7 @@ class CanvasContainer extends Component {
 
   handleKeyStatusChange(){
     this.keyStatus = this.props.keyStatus;
-
+    
     if(!this.keyStatus){
       this.updateState({
         newRectMode: false,
@@ -133,7 +136,24 @@ class CanvasContainer extends Component {
       case 40:
         this.arrowKeyMoveHandler('bottom');
          break;
+      case 13:
+        this.showGuides(this.state.selectionId);
     } 
+  }
+
+  showGuides(rectId){
+
+    this.updateState({
+      mouseDownRectId: rectId
+    })
+
+    clearTimeout(this.arrowMoveTimeout);
+
+    this.arrowMoveTimeout = setTimeout(() => {
+      this.updateState({
+        mouseDownRectId: null,
+      })
+    }, 1000);
   }
 
   resizeHandler(mouseDownPosition, resizeType){
@@ -378,15 +398,11 @@ class CanvasContainer extends Component {
     }
 
     this.updateState({
-        mouseDownRectId: rect.id,
         rects: newRectState
     });
     
-    setTimeout(() => {
-      this.updateState({
-        mouseDownRectId: null,
-      })
-    }, 1000);
+
+    this.showGuides(rect.id);
   }
   
   render() { 

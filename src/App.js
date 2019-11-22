@@ -38,9 +38,10 @@ class App extends Component {
 
 
   keyDownHandler(event){
-    if(this.state.keyStatus!=event.keyCode){
+    // if(this.state.keyStatus!=event.keyCode){
+      this.updateState({keyStatus: null});
       this.updateState({keyStatus: event.keyCode});
-    }
+    // }
   }
 
   keyUpHandler(event){
