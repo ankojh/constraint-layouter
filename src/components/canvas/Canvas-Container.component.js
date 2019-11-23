@@ -88,7 +88,7 @@ class CanvasContainer extends Component {
 
   handleKeyStatusChange(){
     this.keyStatus = this.props.keyStatus;
-    
+
     if(!this.keyStatus){
       this.updateState({
         newRectMode: false,
@@ -384,17 +384,25 @@ class CanvasContainer extends Component {
       return;
     }
 
+    const multiplier = 1;
+
+    console.log(this.state.newRectMode);
+
+    if (this.state.newRectMode) {
+      multiplier = 10;
+    }
+
     if(keyType == 'left'){
-      rect.x -= 1;
+      rect.x -= multiplier;
     }
     else if(keyType == 'top'){
-      rect.y -= 1;
+      rect.y -= multiplier;
     }
     else if(keyType == 'right'){
-      rect.x += 1;
+      rect.x += multiplier;
     }
     else if(keyType == 'bottom'){
-      rect.y += 1;
+      rect.y += multiplier;
     }
 
     this.updateState({
