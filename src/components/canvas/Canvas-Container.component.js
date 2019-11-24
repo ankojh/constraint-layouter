@@ -386,8 +386,6 @@ class CanvasContainer extends Component {
 
     const multiplier = 1;
 
-    console.log(this.state.newRectMode);
-
     if (this.state.newRectMode) {
       multiplier = 10;
     }

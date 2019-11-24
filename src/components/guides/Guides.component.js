@@ -34,6 +34,8 @@ class Guides extends Component {
       column: getColumnGuides(newProps.rectData, selectedRectData, wrtRectIds)
     }
 
+    // console.log(this.guideData.column);
+
     if (!this.props.wrtRectIdsIsSet) {
       const newWrtRectIds = Array.from(new Set([...this.guideData.row.wrtRectIds, ...this.guideData.column.wrtRectIds]));
 

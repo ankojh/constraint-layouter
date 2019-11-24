@@ -30,6 +30,7 @@ export function getColumnGuides(rectData, selectionRect, wrtRectIds) {
 function getBestGuides(rectData, selectionRect, wrtRectIds, partGuides, rowOrColumn){
   if (!wrtRectIds.length) {
     const matchedGuidesRect = partGuides.map(guideData => rectData.find(rd => rd.id == guideData.id));
+
     const closestRect = getClosestMatchedRect(selectionRect, matchedGuidesRect, rowOrColumn);
     wrtRectIds = closestRect ? [closestRect.id] : [];
   }
@@ -48,7 +49,7 @@ function getPartGuides(partDetails, selectionId){
 
   const partDetailsLines = partDetails.map(detail => {return {id:detail.id, linePositions:[
     detail.start,
-    (detail.start + detail.end) / 2,
+    Math.ceil((detail.start + detail.end) / 2),
     detail.end
   ]}})
 
