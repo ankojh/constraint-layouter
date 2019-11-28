@@ -1,6 +1,9 @@
 .cl-rect {
   border: 1px solid #009eff;
   background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cl-rect:hover {
