@@ -17,7 +17,9 @@ class Rect extends Component {
         style={this.props.areaStyle}>
           {/* <div className="cl-rect-helper cl-helper-x"></div> */}
           {/* <div className="cl-rect-helper cl-helper-y"></div> */}
-          Name
+          <div className='cl-rectname'>
+            <span contentEditable='true'>Name</span>
+          </div>
         </div> );
   }
 }
