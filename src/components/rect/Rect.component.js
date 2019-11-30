@@ -18,7 +18,7 @@ class Rect extends Component {
           {/* <div className="cl-rect-helper cl-helper-x"></div> */}
           {/* <div className="cl-rect-helper cl-helper-y"></div> */}
           <div className='cl-rectname'>
-            <span contentEditable='true'>Name</span>
+            <span>{this.props.name}</span>
           </div>
         </div> );
   }

@@ -43,6 +43,7 @@ class Canvas extends Component {
         isWrtRect = {this.props.wrtRectIds.includes(data.id)}
         areaStyle = {areaStyle}
         id = {data.id}
+        name = {data.name}
         rectMouseDown = { this.rectMouseDown.bind(this) }
         key={data.id}
         /> );

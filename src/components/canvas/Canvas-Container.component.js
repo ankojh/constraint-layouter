@@ -288,6 +288,7 @@ class CanvasContainer extends Component {
     const newRectId = 'el' + (++this.idCounter);
     
     rectDetails.id = newRectId;
+    rectDetails.name = 'New'
     newRects.push(rectDetails);
 
     this.newRectId = newRectId;
