@@ -3,7 +3,19 @@ import './Rect.css'
 
 class Rect extends Component {
   
-  state = {  }
+  state = { 
+    rectName: ''
+   }
+
+   componentDidMount(){
+     this.setState({
+       rectName: this.props.name
+     });
+   }
+
+  componentDidUpdate(){
+  }
+
 
   constructor(){
     super();
@@ -18,7 +30,7 @@ class Rect extends Component {
           {/* <div className="cl-rect-helper cl-helper-x"></div> */}
           {/* <div className="cl-rect-helper cl-helper-y"></div> */}
           <div className='cl-rectname'>
-            <span>{this.props.name}</span>
+            <span>{this.state.rectName}</span>
           </div>
         </div> );
   }
