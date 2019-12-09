@@ -15,7 +15,6 @@ class Resizer extends Component{
 
 
   resizerUnitMousewDowned(event, resizerType){
-    console.log(resizerType);
     const mouseDownPosition = {x:event.clientX, y:event.clientY};
     this.props.resizeHandler(mouseDownPosition, resizerType);
   }
