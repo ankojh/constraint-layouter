@@ -7,6 +7,7 @@ export default {
       y: 100,
       width: 200,
       height: 200,
+      index: 1,
       class:'one'
     },
     {
@@ -16,6 +17,7 @@ export default {
       y: 100,
       width: 200,
       height: 200,
+      index: 2,
       class:'one'
     },
     {
@@ -25,6 +27,7 @@ export default {
       y: 200,
       width: 200,
       height: 400,
+      index: 3,
       class:'two'
     },
     {
@@ -34,6 +37,7 @@ export default {
       y: 100,
       width: 200,
       height: 300,
+      index: 4,
       class:'three'
     }
   ]

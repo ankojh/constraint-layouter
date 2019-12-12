@@ -39,6 +39,8 @@ class CanvasContainer extends Component {
   idCounter = 1;
 
   arrowMoveTimeout = null;
+
+  maxIndex = 0;
   
 
   constructor(){
@@ -53,7 +55,9 @@ class CanvasContainer extends Component {
     else{
       localStorage.rects = JSON.stringify(rects);
     }
-    
+
+    console.log(rects);
+
     this.state = {
       rects: rects,
       selectionId: null,
@@ -77,6 +81,46 @@ class CanvasContainer extends Component {
     this.canvas = React.createRef();
   }
 
+
+  getMaxIndex(rects){
+    let maxIndex = Infinity;
+
+    rects.forEach(rect => {
+      if(maxIndex > rect.index){
+        maxIndex = rect.index;
+      }
+    })
+
+    if(maxIndex == Infinity){
+      maxIndex = 0;
+    }
+
+
+    console.log(maxIndex);
+    return maxIndex;
+  }
+  
+  getMinIndex(rects){
+    let minIndex = -Infinity;
+    rects.forEach(rect => {
+      if(minIndex < rect.index){
+        minIndex = rect.index;
+      }
+    })
+
+    return minIndex;
+  }
+
+  refactorMaxIndex(rects){
+    const minIndex = this.getMinIndex(rects);
+    
+    rects.forEach(rect => {
+      rect.index-=minIndex;
+    })
+
+    return rects;
+    
+  }
 
   componentDidUpdate(){
     if(this.checkForKeyStatusChange()){
@@ -289,6 +333,7 @@ class CanvasContainer extends Component {
     
     rectDetails.id = newRectId;
     rectDetails.name = 'New'
+    rectDetails.index = this.getMaxIndex(newRects) + 1;
     newRects.push(rectDetails);
 
     this.newRectId = newRectId;
