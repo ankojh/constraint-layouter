@@ -22,3 +22,5 @@ Known Issues:
 
  - 100% App width and height
  - Negatives when removed must be cleared.
+ - Fix New Rect Issue.
+
